@@ -3,13 +3,14 @@ import { userFormRules } from '@/rules/userRules'
 import { useUserStore } from '@/stores/userStore'
 import { ElMessage, type FormInstance } from 'element-plus'
 import { reactive, ref, watch } from 'vue'
+import { useRouter } from 'vue-router'
 
 const props = defineProps<{ visible: boolean }>()
 const emits = defineEmits(['update:visible'])
 const dialogVisible = ref(props.visible)
 
 const userStore = useUserStore()
-
+const router = useRouter()
 const formRef = ref<FormInstance>()
 const form = reactive({
   email: '',
@@ -29,7 +30,7 @@ const onSubmit = async () => {
     await formRef.value.validate()
 
     const duplicateEmailCheck = userStore.users.find(
-      (u) => u.email?.toLocaleLowerCase() === form.email.toLowerCase(),
+      (u) => u.email?.trim().toLowerCase() === form.email.trim().toLowerCase(),
     )
 
     if (duplicateEmailCheck) {
@@ -38,6 +39,12 @@ const onSubmit = async () => {
     }
 
     userStore.registerUser(form.email, form.password)
+
+    ElMessage.success('Registration Successful!')
+
+    dialogVisible.value = false
+
+    router.push('/')
   } catch (error) {
     console.error('User signup error: ', error)
   }

@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { userFormRules } from '@/rules/userRules'
 import { useUserStore } from '@/stores/userStore'
-import type { FormInstance } from 'element-plus'
+import { ElMessage, type FormInstance } from 'element-plus'
 import { reactive, ref, watch } from 'vue'
 
 const props = defineProps<{ visible: boolean }>()
@@ -14,7 +14,6 @@ const formRef = ref<FormInstance>()
 const form = reactive({
   email: '',
   password: '',
-  confirmPassword: '',
 })
 
 watch(
@@ -28,7 +27,9 @@ const onSubmit = async () => {
     if (!formRef.value) return
     await formRef.value.validate()
 
-    //SIGNIN LOGIC HERE
+    userStore.loginUser(form.email, form.password)
+    ElMessage.success('Successfully logged in!')
+    dialogVisible.value = false
   } catch (error) {
     console.error('User signin error: ', error)
   }

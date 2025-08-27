@@ -2,9 +2,12 @@
 import { ref } from 'vue'
 import SignInDialog from './SignInDialog.vue'
 import SignUpDialog from './SignUpDialog.vue'
+import { useUserStore } from '@/stores/userStore'
 
 const showSignIn = ref(false)
 const showSignUp = ref(false)
+
+const userStore = useUserStore()
 </script>
 
 <template>
@@ -12,8 +15,14 @@ const showSignUp = ref(false)
     <span class="logo">TRELLO CLONE</span>
     <div class="nav-links">
       <router-link :to="{ name: 'home' }"><strong>Home</strong></router-link>
-      <el-button @click="showSignIn = true">Login</el-button>
-      <el-button @click="showSignUp = true">SignUp</el-button>
+      <div v-if="!userStore.activeUser">
+        <el-button @click="showSignIn = true">Login</el-button>
+        <el-button @click="showSignUp = true">SignUp</el-button>
+      </div>
+
+      <div v-if="userStore.activeUser">
+        <el-button @click="userStore.logoutUser">Logout</el-button>
+      </div>
     </div>
 
     <SignInDialog v-model:visible="showSignIn" />

@@ -1,13 +1,16 @@
 <script lang="ts" setup>
 import WorkSpaceDialog from '@/components/WorkSpaceDialog.vue'
+import { useUserStore } from '@/stores/userStore'
 import { useWorkSpaceStore } from '@/stores/workspaceStore'
 import { onMounted, ref } from 'vue'
 
 const workspaceStore = useWorkSpaceStore()
+const userStore = useUserStore()
 const showDialog = ref(false)
 
 onMounted(() => {
   workspaceStore.loadWorkSpaces()
+  userStore.loadUser()
 })
 </script>
 
