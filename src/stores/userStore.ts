@@ -7,6 +7,11 @@ export const useUserStore = defineStore('users', {
     activeUser: null as User | null,
   }),
 
+  getters: {
+    isAuthenticated: (state) => !!state.activeUser,
+    activeEmail: (state) => state.activeUser?.email ?? null,
+  },
+
   actions: {
     saveToLocalStorage() {
       localStorage.setItem('users', JSON.stringify(this.users))
@@ -14,16 +19,9 @@ export const useUserStore = defineStore('users', {
 
     loadUser() {
       const userData = localStorage.getItem('users')
-      if (userData) {
-        this.users = JSON.parse(userData)
-      } else {
-        console.log('Failed to fetch user data')
-      }
-
+      this.users = userData ? JSON.parse(userData) : []
       const activeUserData = localStorage.getItem('activeUser')
-      if (activeUserData) {
-        this.activeUser = JSON.parse(activeUserData)
-      }
+      this.activeUser = activeUserData ? JSON.parse(activeUserData) : null
     },
 
     registerUser(email: string, password: string) {
@@ -42,14 +40,10 @@ export const useUserStore = defineStore('users', {
     loginUser(email: string, password: string) {
       const user = this.users.find((u) => u.email === email && u.password === password)
 
-      if (!user) {
-        console.error('Cannot find email')
-        return false
-      }
+      if (!user) throw new Error('Invalid credentials')
 
       this.activeUser = user
       localStorage.setItem('activeUser', JSON.stringify(user))
-      return true
     },
 
     logoutUser() {

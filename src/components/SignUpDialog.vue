@@ -44,7 +44,7 @@ const onSubmit = async () => {
 
     dialogVisible.value = false
 
-    router.push('/')
+    router.push({ name: 'home' })
   } catch (error) {
     console.error('User signup error: ', error)
   }
@@ -61,15 +61,27 @@ const onSubmit = async () => {
       @submit.prevent="onSubmit"
     >
       <el-form-item label="Email" prop="email">
-        <el-input v-model="form.email" placeholder="Enter email" />
+        <el-input v-model="form.email" type="email" placeholder="Enter email" clearable />
       </el-form-item>
 
       <el-form-item label="Password" prop="password">
-        <el-input v-model="form.password" placeholder="Enter password" />
+        <el-input
+          v-model="form.password"
+          type="password"
+          placeholder="Enter password"
+          clearable
+          show-password
+        />
       </el-form-item>
 
       <el-form-item label="Confirm password" prop="confirmPassword">
-        <el-input v-model="form.confirmPassword" placeholder="Confirm your password" />
+        <el-input
+          v-model="form.confirmPassword"
+          type="password"
+          placeholder="Confirm your password"
+          clearable
+          show-password
+        />
       </el-form-item>
 
       <el-button native-type="submit">Register</el-button>

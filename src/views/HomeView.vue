@@ -1,17 +1,10 @@
 <script lang="ts" setup>
 import WorkSpaceDialog from '@/components/WorkSpaceDialog.vue'
-import { useUserStore } from '@/stores/userStore'
 import { useWorkSpaceStore } from '@/stores/workspaceStore'
-import { onMounted, ref } from 'vue'
+import { ref } from 'vue'
 
 const workspaceStore = useWorkSpaceStore()
-const userStore = useUserStore()
 const showDialog = ref(false)
-
-onMounted(() => {
-  workspaceStore.loadWorkSpaces()
-  userStore.loadUser()
-})
 </script>
 
 <template>
@@ -20,7 +13,7 @@ onMounted(() => {
 
     <div class="container">
       <el-button @click="showDialog = true">Add WorkSpace +</el-button>
-      <div v-for="(workspace, index) in workspaceStore.workspaces" :key="index">
+      <div v-for="(workspace, index) in workspaceStore.forActiveUser" :key="index">
         <router-link :to="`/task/${workspace.id}`">
           <el-card shadow="hover">
             <h3>{{ workspace.title }}</h3>

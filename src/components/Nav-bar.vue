@@ -12,7 +12,9 @@ const userStore = useUserStore()
 
 <template>
   <nav class="container">
-    <span class="logo">TRELLO CLONE</span>
+    <router-link :to="{ name: 'home' }" class="logo-link">
+      <span class="logo">TRELLO CLONE</span>
+    </router-link>
     <div class="nav-links">
       <router-link :to="{ name: 'home' }"><strong>Home</strong></router-link>
       <div v-if="!userStore.activeUser">
@@ -39,11 +41,30 @@ const userStore = useUserStore()
   align-items: center;
 }
 
+.logo-link {
+  text-decoration: none;
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.logo-link:hover {
+  background-color: #f8f9fa;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
 .logo {
   font-size: 1.5rem;
   font-weight: bold;
   color: #000;
   letter-spacing: 0.5px;
+  transition: color 0.3s ease;
+}
+
+.logo-link:hover .logo {
+  color: #0066cc;
 }
 
 .nav-links {

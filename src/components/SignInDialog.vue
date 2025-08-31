@@ -46,11 +46,17 @@ const onSubmit = async () => {
       @submit.prevent="onSubmit"
     >
       <el-form-item label="Email" prop="email">
-        <el-input v-model="form.email" placeholder="Enter email" />
+        <el-input v-model="form.email" type="email" placeholder="Enter email" clearable />
       </el-form-item>
 
       <el-form-item label="Password" prop="password">
-        <el-input v-model="form.password" placeholder="Enter password" />
+        <el-input
+          v-model="form.password"
+          type="password"
+          placeholder="Enter password"
+          clearable
+          show-password
+        />
       </el-form-item>
 
       <el-button native-type="submit">Login</el-button>

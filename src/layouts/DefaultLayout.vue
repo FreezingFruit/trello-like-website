@@ -9,10 +9,6 @@ import NavBar from '@/components/Nav-bar.vue'
 </template>
 
 <style scoped>
-header {
-  width: 100vw;
-}
-
 main {
   width: 1440px;
   margin: auto;
