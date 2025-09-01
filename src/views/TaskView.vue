@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import ManageMemberDrawer from '@/components/ManageMemberDrawer.vue'
 import TaskForm from '@/components/TaskForm.vue'
 import { useWorkSpaceStore } from '@/stores/workspaceStore'
 import type { Task } from '@/types/Task'
@@ -12,6 +13,7 @@ const showDialog = ref(false)
 
 const workspaceId = Number(route.params.id)
 const workspace = computed(() => store.workspaces.find((ws) => ws.id === workspaceId))
+const showManageMember = ref(false)
 
 const todoTasks = computed({
   get: () => workspace.value?.task?.filter((t) => t.status === 'todo') ?? [],
@@ -81,6 +83,7 @@ onMounted(() => {
     <div class="workspace-header">
       <h2>{{ workspace?.title }}</h2>
       <p class="workspace-description">{{ workspace?.description }}</p>
+      <el-button class="add-member-btn" @click="showManageMember = true">Manage members</el-button>
     </div>
 
     <div class="board-columns">
@@ -198,6 +201,7 @@ onMounted(() => {
     </div>
 
     <TaskForm v-model:visible="showDialog" :status="activeStatus" :workspace-id="workspaceId" />
+    <ManageMemberDrawer v-model:visible="showManageMember" :workspace-id="workspaceId" />
   </section>
 </template>
 
@@ -212,6 +216,7 @@ onMounted(() => {
 .workspace-header {
   margin-bottom: 2rem;
   text-align: center;
+  position: relative;
 }
 
 .workspace-header h2 {
@@ -229,6 +234,25 @@ onMounted(() => {
   font-size: 1.1rem;
   margin: 1rem 0 0 0;
   font-weight: 500;
+}
+
+.add-member-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: transparent;
+  border: 2px solid #000;
+  color: #000;
+  font-weight: 600;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+:deep(.add-member-btn:hover) {
+  background-color: #000;
+  color: white;
+  transform: translateY(-1px);
 }
 
 .board-columns {
@@ -412,6 +436,11 @@ onMounted(() => {
 
   .workspace-header h2 {
     font-size: 2rem;
+  }
+
+  .add-member-btn {
+    position: static;
+    margin-top: 1rem;
   }
 }
 

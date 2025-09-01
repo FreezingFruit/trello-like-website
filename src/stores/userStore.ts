@@ -13,8 +13,9 @@ export const useUserStore = defineStore('users', {
   },
 
   actions: {
-    saveToLocalStorage() {
-      localStorage.setItem('users', JSON.stringify(this.users))
+    //local storage saving helper
+    saveToLocalStorage(key: string, value: unknown) {
+      localStorage.setItem(key, JSON.stringify(value))
     },
 
     loadUser() {
@@ -26,24 +27,28 @@ export const useUserStore = defineStore('users', {
 
     registerUser(email: string, password: string) {
       const newUser: User = {
-        email: email,
-        password: password,
+        email,
+        password,
       }
 
       this.users.push(newUser)
-      this.saveToLocalStorage()
+      this.saveToLocalStorage('users', this.users)
 
       this.activeUser = newUser
-      localStorage.setItem('activeUser', JSON.stringify(newUser))
+      this.saveToLocalStorage('activeUser', newUser)
+
+      return true
     },
 
     loginUser(email: string, password: string) {
       const user = this.users.find((u) => u.email === email && u.password === password)
 
-      if (!user) throw new Error('Invalid credentials')
-
-      this.activeUser = user
-      localStorage.setItem('activeUser', JSON.stringify(user))
+      if (user) {
+        this.activeUser = user
+        this.saveToLocalStorage('activeUser', user)
+        return true
+      }
+      return false
     },
 
     logoutUser() {

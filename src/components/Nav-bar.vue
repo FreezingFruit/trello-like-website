@@ -1,34 +1,49 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
-import SignInDialog from './SignInDialog.vue'
-import SignUpDialog from './SignUpDialog.vue'
 import { useUserStore } from '@/stores/userStore'
+import AuthDialog from './AuthDialog.vue'
+import { useRouter } from 'vue-router'
+import { ElMessage } from 'element-plus'
 
-const showSignIn = ref(false)
-const showSignUp = ref(false)
+const showDialog = ref(false)
+const formMode = ref<'signin' | 'signup'>('signin')
 
 const userStore = useUserStore()
+const router = useRouter()
+
+const openDialog = (mode: 'signin' | 'signup') => {
+  formMode.value = mode
+  showDialog.value = true
+}
 </script>
 
 <template>
   <nav class="container">
-    <router-link :to="{ name: 'home' }" class="logo-link">
+    <router-link :to="{ name: 'welcome' }" class="logo-link">
       <span class="logo">TRELLO CLONE</span>
     </router-link>
     <div class="nav-links">
       <router-link :to="{ name: 'home' }"><strong>Home</strong></router-link>
       <div v-if="!userStore.activeUser">
-        <el-button @click="showSignIn = true">Login</el-button>
-        <el-button @click="showSignUp = true">SignUp</el-button>
+        <el-button @click="openDialog('signin')">Login</el-button>
+        <el-button @click="openDialog('signup')">SignUp</el-button>
       </div>
 
       <div v-if="userStore.activeUser">
-        <el-button @click="userStore.logoutUser">Logout</el-button>
+        <el-button
+          @click="
+            () => {
+              userStore.logoutUser()
+              router.push({ name: 'welcome' })
+              ElMessage.success('Logout Successful')
+            }
+          "
+          >Logout</el-button
+        >
       </div>
     </div>
 
-    <SignInDialog v-model:visible="showSignIn" />
-    <SignUpDialog v-model:visible="showSignUp" />
+    <AuthDialog v-model:visible="showDialog" v-model:mode="formMode" />
   </nav>
 </template>
 

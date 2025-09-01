@@ -25,7 +25,13 @@ const onSubmit = async () => {
 </script>
 
 <template>
-  <el-form ref="formRef" :model="form" label-width="auto" @submit.prevent="onSubmit">
+  <el-form
+    ref="formRef"
+    :model="form"
+    label-width="auto"
+    @submit.prevent="onSubmit"
+    label-position="top"
+  >
     <el-form-item label="Title">
       <el-input v-model="form.title" placeholder="Enter title" />
     </el-form-item>

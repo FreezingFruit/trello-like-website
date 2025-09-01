@@ -15,7 +15,9 @@ export const useWorkSpaceStore = defineStore('workspaces', {
       const userStore = useUserStore()
       const email = userStore.activeUser?.email
       if (!email) return []
-      return state.workspaces.filter((ws) => ws.ownerEmail === email)
+      return state.workspaces.filter(
+        (ws) => ws.ownerEmail === email || ws.userWithAccess?.some((u) => u.email === email),
+      )
     },
     //getter for router /task/:id
     byId: (state) => (id: number) => state.workspaces.find((ws) => ws.id === id),
@@ -40,6 +42,7 @@ export const useWorkSpaceStore = defineStore('workspaces', {
         task: [],
         createdAt: new Date().toISOString(),
         ownerEmail: userStore.activeUser.email,
+        userWithAccess: [],
       }
 
       this.workspaces.push(newWorkspace)
@@ -81,6 +84,51 @@ export const useWorkSpaceStore = defineStore('workspaces', {
       if (!workspace?.task) return
 
       workspace.task = workspace.task.filter((t) => t.id !== taskId)
+      this.saveWorkSpaces()
+    },
+
+    deleteWorkspace(workspaceId: number) {
+      const userStore = useUserStore()
+      this.workspaces = this.workspaces.filter(
+        (ws) => !(ws.id === workspaceId && ws.ownerEmail === userStore.activeUser?.email),
+      )
+
+      this.saveWorkSpaces()
+    },
+
+    addUserAccess(workspaceId: number, email: string) {
+      const userStore = useUserStore()
+      const workspace = this.workspaces.find((ws) => ws.id === workspaceId)
+
+      if (!workspace) return
+      if (workspace.ownerEmail !== userStore.activeUser?.email) return
+
+      const user = userStore.users.find((u) => u.email === email)
+      if (!user) {
+        console.warn('User not found')
+        return
+      }
+
+      if (!workspace.userWithAccess) {
+        workspace.userWithAccess = []
+      }
+
+      const exists = workspace.userWithAccess.some((u) => u.email === user.email)
+      if (exists) return
+
+      workspace.userWithAccess.push(user)
+      this.saveWorkSpaces()
+    },
+
+    removeUserAccess(workspaceId: number, email: string) {
+      const userStore = useUserStore()
+      const workspace = this.workspaces.find((ws) => ws.id === workspaceId)
+
+      if (!workspace) return
+
+      if (workspace.ownerEmail !== userStore.activeUser?.email) return
+
+      workspace.userWithAccess = workspace.userWithAccess?.filter((u) => u.email !== email) || []
       this.saveWorkSpaces()
     },
   },

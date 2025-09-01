@@ -1,4 +1,13 @@
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+import AuthDialog from '@/components/AuthDialog.vue'
+import { useUiStore } from '@/stores/uiStore'
+
+const uiStore = useUiStore()
+
+const learnMore = () => {
+  window.open('https://www.youtube.com/watch?v=xvFZjo5PgG0&list=RDxvFZjo5PgG0&start_radio=1')
+}
+</script>
 
 <template>
   <div class="welcome-container">
@@ -8,10 +17,23 @@
       <p class="subtitle">Organize your work and life, finally.</p>
 
       <div class="cta-section">
-        <el-button class="cta-button" type="primary" size="large"> Get Started </el-button>
-        <el-button class="cta-button" size="large"> Learn More </el-button>
+        <el-button
+          class="cta-button"
+          type="primary"
+          size="large"
+          @click="uiStore.openDialog('signin')"
+        >
+          Get Started
+        </el-button>
+        <el-button class="cta-button" size="large" @click="learnMore"> Learn More </el-button>
       </div>
     </div>
+
+    <AuthDialog
+      v-model:visible="uiStore.showAuthDialog"
+      v-model:mode="uiStore.authMode"
+      @close="uiStore.closeDialog"
+    />
   </div>
 </template>
 
