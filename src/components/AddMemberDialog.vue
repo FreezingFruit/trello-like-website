@@ -37,8 +37,6 @@ const onSubmit = async () => {
     console.error('Error in adding member submission: ', error)
   }
 }
-
-console.log(props.workspaceId)
 </script>
 
 <template>
