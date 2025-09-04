@@ -80,11 +80,6 @@ const deleteWorkspace = async (workspace: Workspace, event: Event) => {
             <h3>{{ workspace.title }}</h3>
           </el-card>
         </router-link>
-        <el-tooltip effect="dark" content="Delete workspace" placement="top-start">
-          <button class="delete-btn" @click="deleteWorkspace(workspace, $event)">
-            <el-icon><Close /></el-icon>
-          </button>
-        </el-tooltip>
       </div>
     </div>
   </section>

@@ -1,12 +1,14 @@
 import { useUiStore } from '@/stores/uiStore'
 import { useUserStore } from '@/stores/userStore'
 import HomeView from '@/views/HomeView.vue'
+import NotFound from '@/views/NotFound.vue'
 import TaskView from '@/views/TaskView.vue'
 import WelcomeView from '@/views/WelcomeView.vue'
 import { createWebHistory, createRouter } from 'vue-router'
 
 const routes = [
   { path: '/', name: 'welcome', component: WelcomeView },
+  { path: '/:pathMatch(.*)*', name: 'notfound', component: NotFound },
 
   //requires auth routes:
   { path: '/home', name: 'home', component: HomeView, meta: { requiresAuth: true } },
