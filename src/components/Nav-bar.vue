@@ -1,45 +1,72 @@
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { onMounted, onUnmounted, ref } from 'vue'
 import { useUserStore } from '@/stores/userStore'
 import AuthDialog from './AuthDialog.vue'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
+import MobileMenu from './MobileMenu.vue'
 
 const showDialog = ref(false)
 const formMode = ref<'signin' | 'signup'>('signin')
 
 const userStore = useUserStore()
 const router = useRouter()
+const showMobileMenu = ref(false)
 
 const openDialog = (mode: 'signin' | 'signup') => {
   formMode.value = mode
   showDialog.value = true
 }
+
+//mobile screen handler
+
+const isMobile = ref(window.innerWidth < 768)
+
+onMounted(() => {
+  const handleResize = () => {
+    isMobile.value = window.innerWidth < 768
+  }
+
+  window.addEventListener('resize', handleResize)
+
+  onUnmounted(() => {
+    window.removeEventListener('resize', handleResize)
+  })
+})
 </script>
 
 <template>
   <nav class="container">
-    <router-link :to="{ name: 'welcome' }" class="logo-link">
-      <span class="logo">TRELLO CLONE</span>
-    </router-link>
-    <div class="nav-links">
-      <router-link :to="{ name: 'home' }"><strong>Home</strong></router-link>
-      <div v-if="!userStore.activeUser">
-        <el-button @click="openDialog('signin')">Login</el-button>
-        <el-button @click="openDialog('signup')">SignUp</el-button>
-      </div>
+    <!--Mobile menu-->
+    <el-button v-if="isMobile" @click="showMobileMenu = true"
+      ><el-icon><Menu /></el-icon
+    ></el-button>
 
-      <div v-if="userStore.activeUser">
-        <el-button
-          @click="
-            () => {
-              userStore.logoutUser()
-              router.push({ name: 'welcome' })
-              ElMessage.success('Logout Successful')
-            }
-          "
-          >Logout</el-button
-        >
+    <MobileMenu v-model:visible="showMobileMenu" />
+    <!--Desktop screen-->
+    <div v-if="!isMobile" class="nav-content">
+      <router-link :to="{ name: 'welcome' }" class="logo-link">
+        <span class="logo">TRELLO CLONE</span>
+      </router-link>
+      <div class="nav-links">
+        <router-link :to="{ name: 'home' }"><strong>Home</strong></router-link>
+        <div v-if="!userStore.activeUser">
+          <el-button @click="openDialog('signin')">Login</el-button>
+          <el-button @click="openDialog('signup')">SignUp</el-button>
+        </div>
+
+        <div v-if="userStore.activeUser">
+          <el-button
+            @click="
+              () => {
+                userStore.logoutUser()
+                router.push({ name: 'welcome' })
+                ElMessage.success('Logout Successful')
+              }
+            "
+            >Logout</el-button
+          >
+        </div>
       </div>
     </div>
 
@@ -51,11 +78,14 @@ const openDialog = (mode: 'signin' | 'signup') => {
 .container {
   background-color: white;
   padding: 2rem 4rem;
-  display: flex;
-  justify-content: space-between;
   align-items: center;
   width: 100%;
   margin: 0 auto;
+}
+
+.nav-content {
+  display: flex;
+  justify-content: space-between;
 }
 
 .logo-link {
