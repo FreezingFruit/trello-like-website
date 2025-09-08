@@ -145,8 +145,8 @@ const openTaskDetail = (workspaceId: number, taskId: number) => {
                   <el-input
                     title="Name"
                     v-model="element.title"
-                    @blur="saveTask(element)"
                     @keyup.enter="saveTask(element)"
+                    @click.stop
                     placeholder="Edit your task"
                     style="margin-bottom: 1rem"
                   />
@@ -154,8 +154,8 @@ const openTaskDetail = (workspaceId: number, taskId: number) => {
                   <el-input
                     v-model="element.description"
                     type="textarea"
-                    @blur="saveTask(element)"
                     @keyup.enter="saveTask(element)"
+                    @click.stop
                     placeholder="Edit description"
                   />
 
@@ -223,8 +223,8 @@ const openTaskDetail = (workspaceId: number, taskId: number) => {
                 <template v-else>
                   <el-input
                     v-model="element.title"
-                    @blur="saveTask(element)"
                     @keyup.enter="saveTask(element)"
+                    @click.stop
                     placeholder="Edit title"
                     style="margin-bottom: 1rem"
                   />
@@ -232,8 +232,8 @@ const openTaskDetail = (workspaceId: number, taskId: number) => {
                   <el-input
                     v-model="element.description"
                     type="textarea"
-                    @blur="saveTask(element)"
                     @keyup.enter="saveTask(element)"
+                    @click.stop
                     placeholder="Edit description"
                   />
 
@@ -298,8 +298,8 @@ const openTaskDetail = (workspaceId: number, taskId: number) => {
                 <template v-else>
                   <el-input
                     v-model="element.title"
-                    @blur="saveTask(element)"
                     @keyup.enter="saveTask(element)"
+                    @click.stop
                     placeholder="Edit title"
                     style="margin-bottom: 1rem"
                   />
@@ -307,8 +307,8 @@ const openTaskDetail = (workspaceId: number, taskId: number) => {
                   <el-input
                     v-model="element.description"
                     type="textarea"
-                    @blur="saveTask(element)"
                     @keyup.enter="saveTask(element)"
+                    @click.stop
                     placeholder="Edit description"
                   />
 

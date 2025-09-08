@@ -1,14 +1,14 @@
 <script lang="ts" setup>
-import WorkSpaceDialog from '@/components/WorkSpaceDialog.vue'
 import { useWorkSpaceStore } from '@/stores/workspaceStore'
 import { ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import type { Workspace } from '@/types/Workspace'
 import AddMemberDialog from '@/components/AddMemberDialog.vue'
 import { useUserStore } from '@/stores/userStore'
+import WorkSpaceForm from '@/components/WorkSpaceForm.vue'
 
 const workspaceStore = useWorkSpaceStore()
-const showDialog = ref(false)
+const showFormDialog = ref(false)
 const showMemberDialog = ref(false)
 const selectedWorkspaceId = ref<number | null>(null)
 const userStore = useUserStore()
@@ -42,7 +42,7 @@ const deleteWorkspace = async (workspace: Workspace, event: Event) => {
     <h2>WorkSpaces</h2>
 
     <div class="container">
-      <el-button @click="showDialog = true"
+      <el-button @click="showFormDialog = true"
         >Add WorkSpace <el-icon><Plus /></el-icon
       ></el-button>
       <div
@@ -84,7 +84,7 @@ const deleteWorkspace = async (workspace: Workspace, event: Event) => {
     </div>
   </section>
 
-  <WorkSpaceDialog v-model:visible="showDialog" />
+  <WorkSpaceForm v-model:visible="showFormDialog" />
   <AddMemberDialog v-model:visible="showMemberDialog" :workspace-id="selectedWorkspaceId!" />
 </template>
 
