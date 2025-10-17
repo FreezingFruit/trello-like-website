@@ -46,7 +46,7 @@ onMounted(() => {
     <!--Desktop screen-->
     <div v-if="!isMobile" class="nav-content">
       <router-link :to="{ name: 'welcome' }" class="logo-link">
-        <span class="logo">TRELLO CLONE</span>
+        <span class="logo">MY TASK TRACKER</span>
       </router-link>
       <div class="nav-links">
         <router-link :to="{ name: 'home' }"><strong>Home</strong></router-link>
